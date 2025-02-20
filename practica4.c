@@ -16,7 +16,7 @@
 #define pulse_3 PIN_A3	//To stop the alarm.
 
 //Definicion de variables y funciones.
-int sec, min, hour, day, month, year, cont, parameter, antirebote;
+int sec, min, hour, day, month, year, cont, parameter, antirebote, ndays;
 _int anti_rebote(void);
 int blink(void);
 int clock_calendar(void);
@@ -92,14 +92,87 @@ int establecer_fecha(int x, int y, int parameter){
 	while(true){
 		while(!pulse_1){
 			parameter++;
-			if(i==0 && parameter>99){
+			if(i==0 && parameter>99){ //Years.
 				parameter = 0;
-			}if(i==1 && parameter>12){
-				parametro = 1;
-			
-				
+			}if(i==1 && parameter>12){ //Months.
+				parameter = 1;
+			}if(i==2 && parameter>ndays){ //Days determined by the calc.
+				parameter = 1;
+			}if(i==3 && parameter>23){ //Hours.
+				parameter = 0;
+			}if(i==4 && parameter>59){ //Minutes.
+				parameter = 0;
+			}
+			LCD_GOTOXY(x,y);
+			LCD_PUTC("  ");
+			blink();
+			LCD_GOTOXY(x,y);
+			LCD_PUTC(parameter / 10 + '0');
+			LCD_PUTC(parameter % 10 + '0');
+			blink();
+
+			if(!pulse_1){
+				if(anti_rebote()){
+					i++;
+					return parameter;
+				}
+			}
+		}
+	}
+}
+
+nt ndays(int monthNumber, int year) 
+{ 
+    if (monthNumber == 0) //Enero
+        return (31); 
+
+    if (monthNumber == 1) { //Febrero
+        // If the year is leap then Feb 
+        // has 29 days 
+        if (year % 400 == 0 
+            || (year % 4 == 0 
+                && year % 100 != 0)) 
+            return (29); 
+        else
+            return (28); 
+    } 
+
+    if (monthNumber == 2) //Marzo
+        return (31); 
+
+    if (monthNumber == 3) //Abril
+        return (30); 
+
+    if (monthNumber == 4) //Mayo
+        return (31); 
+
+    if (monthNumber == 5) //Junio
+        return (30); 
+
+    if (monthNumber == 6) //Julio
+        return (31); 
+
+    if (monthNumber == 7) //Agosto
+        return (31); 
+
+    if (monthNumber == 8) //Septiembre
+        return (30); 
+
+    if (monthNumber == 9) //Octubre
+        return (31); 
+
+    if (monthNumber == 10) //Noviembre
+        return (30); 
+
+    if (monthNumber == 11) //Diciembre
+        return (31);
+} 
+
 
 
 int main(){
 	lcd_init();
+	while(true){
+		if(!pulse_1){
+			if(anti_rebote()
 }
