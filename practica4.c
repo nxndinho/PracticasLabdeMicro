@@ -35,7 +35,10 @@ __bit anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
 	}
 }
 		
-			
+void clock_calendar(void){
+	//Allocate a permanent memory with static_char 
+	static_char Time[] = "00:00:00";
+	static_char Date[] = "00/00/2000";
 	
 
 int establecer_fecha(int x, int y, int parameter){
