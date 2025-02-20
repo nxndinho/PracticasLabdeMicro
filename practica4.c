@@ -16,14 +16,14 @@
 
 
 int sec, min, hour, day, month, year, cont, parameter, antirebote;
-__bit anti_rebote(void);
-void blink(void);
-void clock_calendar(void);
+_int anti_rebote(void);
+int blink(void);
+int clock_calendar(void);
 int establecer_fecha(int x, int y, int parameter);
 int dec_to_bcd(int num);
 int bcd_to_dec(int num);
 
-__bit anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
+int anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
 	int cont = 0;
 	for(int i=0; i<10; i++){ //Retardo de 10ms
 		if(pulse_0 == 0 || pulse_2 == 0){ //Main & alarm config.
@@ -45,7 +45,7 @@ int dec_to_bcd(int num){
 	return(((num/10) << 4) + (num % 10)); // Retornamos
 }
 
-void clock_calendar(void){
+int clock_calendar(void){
 	//Allocate a permanent memory with static_char 
 	static_char Time[] = "00:00:00";
 	static_char Date[] = "2000/00/00"; //YYYY/MM/DD
@@ -78,7 +78,7 @@ void clock_calendar(void){
 	LCD_PUTC(Date);  //Imprime el array Date.
 }
 
-void blink(void){
+int blink(void){
 	int j = 0;
 	while( j<100 && pulse_0 && pulse_1){
 		j++;
@@ -98,5 +98,4 @@ int establecer_fecha(int x, int y, int parameter){
 
 int main(){
 	lcd_init();
-	lcd_putc("\f");
 }
