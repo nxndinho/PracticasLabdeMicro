@@ -9,12 +9,13 @@
 #BYTE PORTB = 6
 #BYTE PORTD = 8
 
+//Definicion de puertos de entrada.
 #define pulse_0 PIN_A0	//To enter time config.
 #define pulse_1 PIN_A1	//To change selected parameter.
 #define pulse_2 PIN_A2	//To configure alarm.
 #define pulse_3 PIN_A3	//To stop the alarm.
 
-
+//Definicion de variables y funciones.
 int sec, min, hour, day, month, year, cont, parameter, antirebote;
 _int anti_rebote(void);
 int blink(void);
@@ -23,9 +24,9 @@ int establecer_fecha(int x, int y, int parameter);
 int dec_to_bcd(int num);
 int bcd_to_dec(int num);
 
-int anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
+int anti_rebote(void){ 
 	int cont = 0;
-	for(int i=0; i<10; i++){ //Retardo de 10ms
+	for(int i=0; i<5; i++){ //Retardo de 10ms
 		if(pulse_0 == 0 || pulse_2 == 0){ //Main & alarm config.
 			cont++;
 			if(cont > 2){
@@ -36,6 +37,7 @@ int anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
 		}
 	}
 }
+
 //Funcion de conversion de bcd a decimal.
 int bcd_to_dec(int num){
 	return((num >> 4) * 10 + (num & 0x0F)); //Retornamos
@@ -47,8 +49,8 @@ int dec_to_bcd(int num){
 
 int clock_calendar(void){
 	//Allocate a permanent memory with static_char 
-	static_char Time[] = "00:00:00";
-	static_char Date[] = "2000/00/00"; //YYYY/MM/DD
+	static char Time[] = "00:00:00";
+	static char Date[] = "2000/00/00"; //YYYY/MM/DD
 
 	sec = bcd_to_dec(sec);
 	min = bcd_to_dec(min);
@@ -71,13 +73,13 @@ int clock_calendar(void){
 	Date[6] = month % 10 + '0';
 	Date[8] = day / 10 + '0';
 	Date[9] = day % 10 + '0';
-
+	
 	LCD_GOTOXY(1,1); //Cursor en fila 1, columna 1.
 	LCD_PUTC(Time);  //Imprime el array Time.
 	LCD_GOTOXY(1,2); //Cursor en fila 2, columna 1.
 	LCD_PUTC(Date);  //Imprime el array Date.
 }
-
+//Animacion de seleccion.
 int blink(void){
 	int j = 0;
 	while( j<100 && pulse_0 && pulse_1){
@@ -92,7 +94,9 @@ int establecer_fecha(int x, int y, int parameter){
 			parameter++;
 			if(i==0 && parameter>99){
 				parameter = 0;
-			}else{
+			}if(i==1 && parameter>12){
+				parametro = 1;
+			
 				
 
 
