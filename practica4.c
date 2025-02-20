@@ -90,8 +90,10 @@ int establecer_fecha(int x, int y, int parameter){
 	while(true){
 		while(!pulse_1){
 			parameter++;
-			if
-
+			if(i==0 && parameter>99){
+				parameter = 0;
+			}else{
+				
 
 
 int main(){
