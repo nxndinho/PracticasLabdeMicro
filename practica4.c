@@ -15,7 +15,7 @@
 #define pulse_3 PIN_A3	//To stop the alarm.
 
 
-int second, minute, hour, day, month, year, cont, parameter, antirebote;
+int sec, min, hour, day, month, year, cont, parameter, antirebote;
 __bit anti_rebote(void);
 void blink(void);
 void clock_calendar(void);
@@ -36,13 +36,49 @@ __bit anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
 		}
 	}
 }
-		
+//Funcion de conversion de bcd a decimal.
+int bcd_to_dec(int num){
+	return((num >> 4) * 10 + (num & 0x0F)); //Retornamos
+}
+//Funcion de conversion de decimal a bcd.
+int dec_to_bcd(int num){
+	return(((num/10) << 4) + (num % 10)); // Retornamos
+}
+
+
+
 void clock_calendar(void){
 	//Allocate a permanent memory with static_char 
 	static_char Time[] = "00:00:00";
 	static_char Date[] = "00/00/2000";
-	
 
+	sec = bcd_to_dec(sec);
+	min = bcd_to_dec(min);
+	hour = bcd_to_dec(hour);
+	day = bcd_to_dec(day);
+	month = bcd_to_dec(month);
+	year = bcd_to_dec(year);
+	
+	//Se dispone ahora a guardar las variables en las posiciones del array.
+	Time[0] = hour / 10 + '0';
+	Time[1] = hour % 10 + '0';
+	Time[3] = min / 10 + '0';
+	Time[4] = min % 10 + '0';
+	Time[6] = sec / 10 + '0';
+	Time[7] = sec % 10 + '0';
+
+	Date[0] = day / 10 + '0';
+	Date[1] = day % 10 + '0';
+	Date[3] = month / 10 + '0';
+	Date[4] = month % 10 + '0';
+	Date[8] = year / 10 + '0';
+	Date[9] = year % 10 + '0';
+
+	LCD_GOTOXY(1,1); //Cursor en fila 1, columna 1.
+	LCD_PUTC(Time);  //Imprime el array Time.
+	LCD_GOTOXY(1,2); //Cursor en fila 2, columna 1.
+	LCD_PUTC(Date);  //Imprime el array Date.
+}
 
 int main(){
 	lcd_init();
