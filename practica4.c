@@ -19,7 +19,9 @@ int second, minute, hour, day, month, year, cont, parameter, antirebote;
 __bit anti_rebote(void);
 void blink(void);
 void clock_calendar(void);
-
+int establecer_fecha(int x, int y, int parameter);
+int dec_to_bcd(int num);
+int bcd_to_dec(int num);
 
 __bit anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
 	int cont = 0;
@@ -40,8 +42,6 @@ void clock_calendar(void){
 	static_char Time[] = "00:00:00";
 	static_char Date[] = "00/00/2000";
 	
-
-int establecer_fecha(int x, int y, int parameter){
 
 
 int main(){
