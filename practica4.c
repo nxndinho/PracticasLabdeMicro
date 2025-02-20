@@ -1,6 +1,7 @@
 #include <16f877a.h>
 #include <lcd.c>
 #include <stdio.h>
+#include <stdint.h>
 #use delay(clock=4000000)
 #define USE_PORTB_LCD TRUE	//Habilita uso en PORTB para LCD
 #fuses xt, noprotect, nowdt, nobrownout, put, nolvp
@@ -13,7 +14,10 @@
 #define pulse_2 PIN_A2
 #define pulse_3 PIN_A3
 
-int second, minute, hour, day, month, year;
+int second, minute, hour, day, month, year, cont, parameter;
+
+int establecer_fecha(int x, int y, int parameter){
+
 
 int main(){
 	lcd_init();
