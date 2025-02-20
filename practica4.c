@@ -45,12 +45,10 @@ int dec_to_bcd(int num){
 	return(((num/10) << 4) + (num % 10)); // Retornamos
 }
 
-
-
 void clock_calendar(void){
 	//Allocate a permanent memory with static_char 
 	static_char Time[] = "00:00:00";
-	static_char Date[] = "00/00/2000";
+	static_char Date[] = "2000/00/00"; //YYYY/MM/DD
 
 	sec = bcd_to_dec(sec);
 	min = bcd_to_dec(min);
@@ -67,18 +65,34 @@ void clock_calendar(void){
 	Time[6] = sec / 10 + '0';
 	Time[7] = sec % 10 + '0';
 
-	Date[0] = day / 10 + '0';
-	Date[1] = day % 10 + '0';
-	Date[3] = month / 10 + '0';
-	Date[4] = month % 10 + '0';
-	Date[8] = year / 10 + '0';
-	Date[9] = year % 10 + '0';
+	Date[2] = year / 10 + '0';
+	Date[3] = year % 10 + '0';
+	Date[5] = month / 10 + '0';
+	Date[6] = month % 10 + '0';
+	Date[8] = day / 10 + '0';
+	Date[9] = day % 10 + '0';
 
 	LCD_GOTOXY(1,1); //Cursor en fila 1, columna 1.
 	LCD_PUTC(Time);  //Imprime el array Time.
 	LCD_GOTOXY(1,2); //Cursor en fila 2, columna 1.
 	LCD_PUTC(Date);  //Imprime el array Date.
 }
+
+void blink(void){
+	int j = 0;
+	while( j<100 && pulse_0 && pulse_1){
+		j++;
+	}
+}
+
+int establecer_fecha(int x, int y, int parameter){
+	while(anti_rebote()); //Mientras devuelva un 1.
+	while(true){
+		while(!pulse_1){
+			parameter++;
+			if
+
+
 
 int main(){
 	lcd_init();
