@@ -9,12 +9,34 @@
 #BYTE PORTB = 6
 #BYTE PORTD = 8
 
-#define pulse_0 PIN_A0
-#define pulse_1 PIN_A1
-#define pulse_2 PIN_A2
-#define pulse_3 PIN_A3
+#define pulse_0 PIN_A0	//To enter time config.
+#define pulse_1 PIN_A1	//To change selected parameter.
+#define pulse_2 PIN_A2	//To configure alarm.
+#define pulse_3 PIN_A3	//To stop the alarm.
 
-int second, minute, hour, day, month, year, cont, parameter;
+
+int second, minute, hour, day, month, year, cont, parameter, antirebote;
+__bit anti_rebote(void);
+void blink(void);
+void clock_calendar(void);
+
+
+__bit anti_rebote(void){ //Esta funcion no generara una funcion impermicible.
+	int cont = 0;
+	for(int i=0; i<10; i++){ //Retardo de 10ms
+		if(pulse_0 == 0 || pulse_2 == 0){ //Main & alarm config.
+			cont++;
+			if(cont > 2){
+				return 1;
+			}else{
+				return 0;
+			}
+		}
+	}
+}
+		
+			
+	
 
 int establecer_fecha(int x, int y, int parameter){
 
