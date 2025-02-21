@@ -17,16 +17,16 @@
 
 //Declaracion de Funciones
 int sec, min, hour, day, month, year, cont, parameter, antirebote, ndays, i;
-int anti_rebote(void);
-int blink(void);
-int clock_calendar(void);
+void anti_rebote(void);
+void blink(void);
+void clock_calendar(void);
 int establecer_fecha(int x, int y, int parameter);
 int dec_to_bcd(int num);
 int bcd_to_dec(int num);
 void save_memory(void);
 void load_memory(void);
 
-int anti_rebote(void){ 
+void anti_rebote(void){ 
 	int cont = 0;
 	for(int i=0; i<5; i++){ //Retardo de 10ms
 		if(pulse_0 == 0 || pulse_2 == 0){ //Main & alarm config.
@@ -49,7 +49,7 @@ int dec_to_bcd(int num){
 	return(((num/10) << 4) + (num % 10)); // Retornamos
 }
 
-int clock_calendar(void){
+void clock_calendar(void){
 	//Allocate a permanent memory with static_char 
 	static char Time[] = "00:00:00";
 	static char Date[] = "2000/00/00"; //YYYY/MM/DD
@@ -190,7 +190,7 @@ int main(){
 		if(anti_rebote()){
 			i = 0;
 			hour = establecer_fecha(1,1,hour);
-			minute = establecer_fecha(4,1,minute);
+			min = establecer_fecha(4,1,min);
 			sec = establecer_fecha(7,1,sec);
 			year = establecer_fecha(3,2,year);
 			month = establecer_fecha(6,2,month);
