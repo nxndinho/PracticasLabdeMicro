@@ -15,9 +15,9 @@
 #define pulse_2 PIN_A2	//To configure alarm.
 #define pulse_3 PIN_A3	//To stop the alarm.
 
-//Definicion de variables y funciones.
+//Declaracion de Funciones
 int sec, min, hour, day, month, year, cont, parameter, antirebote, ndays;
-_int anti_rebote(void);
+int anti_rebote(void);
 int blink(void);
 int clock_calendar(void);
 int establecer_fecha(int x, int y, int parameter);
@@ -86,7 +86,7 @@ int blink(void){
 		j++;
 	}
 }
-
+//X & Y son las coordenadas en el LCD.
 int establecer_fecha(int x, int y, int parameter){
 	while(anti_rebote()); //Mientras devuelva un 1.
 	while(true){
@@ -96,7 +96,7 @@ int establecer_fecha(int x, int y, int parameter){
 				parameter = 0;
 			}if(i==1 && parameter>12){ //Months.
 				parameter = 1;
-			}if(i==2 && parameter>ndays){ //Days determined by the calc.
+			}if(i==2 && parameter > ndays){ //Days determined by the calc.
 				parameter = 1;
 			}if(i==3 && parameter>23){ //Hours.
 				parameter = 0;
@@ -111,68 +111,75 @@ int establecer_fecha(int x, int y, int parameter){
 			LCD_PUTC(parameter % 10 + '0');
 			blink();
 
-			if(!pulse_1){
-				if(anti_rebote()){
-					i++;
-					return parameter;
-				}
+			if(!pulse_1)
+			if(anti_rebote()){
+				i++;
+				return parameter;
 			}
 		}
 	}
 }
 
-nt ndays(int monthNumber, int year) 
-{ 
-    if (monthNumber == 0) //Enero
+int ndays(int month, int year) { 
+    if (month == 1) //Enero
         return (31); 
 
-    if (monthNumber == 1) { //Febrero
-        // If the year is leap then Feb 
-        // has 29 days 
-        if (year % 400 == 0 
-            || (year % 4 == 0 
-                && year % 100 != 0)) 
+    if (month == 2) { //Febrero, si el ano es bisiesto Feb tiene 29 dias.
+        if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) 
             return (29); 
         else
             return (28); 
     } 
 
-    if (monthNumber == 2) //Marzo
+    if (month == 3) //Marzo
         return (31); 
 
-    if (monthNumber == 3) //Abril
+    if (month == 4) //Abril
         return (30); 
 
-    if (monthNumber == 4) //Mayo
+    if (month == 5) //Mayo
         return (31); 
 
-    if (monthNumber == 5) //Junio
+    if (month == 6) //Junio
         return (30); 
 
-    if (monthNumber == 6) //Julio
+    if (month == 7) //Julio
         return (31); 
 
-    if (monthNumber == 7) //Agosto
+    if (month == 8) //Agosto
         return (31); 
 
-    if (monthNumber == 8) //Septiembre
+    if (month == 9) //Sep.
         return (30); 
 
-    if (monthNumber == 9) //Octubre
+    if (month == 10) //Oct.
         return (31); 
 
-    if (monthNumber == 10) //Noviembre
+    if (month == 11) //Nov.
         return (30); 
 
-    if (monthNumber == 11) //Diciembre
+    if (month == 12) //Dic.
         return (31);
 } 
-
-
 
 int main(){
 	lcd_init();
 	while(true){
-		if(!pulse_1){
-			if(anti_rebote()
+		if(!pulse_1)
+		if(anti_rebote()){
+			i = 0;
+			hour = establecer_fecha(1,1,hour);
+			minute = establecer_fecha(4,1,minute);
+			sec = establecer_fecha(7,1,sec);
+			year = establecer_fecha(3,2,year);
+			month = establecer_fecha(6,2,month);
+			day = establecer_fecha(9,2,day);
+			while(anti_rebote());
+			hour = dec_to_bcd(hour);
+			min = dec_to_bcd(min);
+			sec = dec_to_bcd(sec);
+			year = dec_to_bcd(year);
+			month = dec_to_bcd(month);
+			day = dec_bcd(day);
+			
 }
