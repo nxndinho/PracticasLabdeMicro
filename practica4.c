@@ -26,7 +26,7 @@ int bcd_to_dec(int num);
 void save_memory(void);
 void load_memory(void);
 
-void anti_rebote(void){ 
+int anti_rebote(void){ 
 	int cont = 0;
 	for(int i=0; i<5; i++){ //Retardo de 10ms
 		if(pulse_0 == 0 || pulse_2 == 0){ //Main & alarm config.
