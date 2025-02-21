@@ -82,7 +82,7 @@ int clock_calendar(void){
 	LCD_PUTC(Date);  //Imprime el array Date.
 }
 //Animacion de seleccion.
-int blink(void){
+void blink(void){
 	int j = 0;
 	while( j<100 && pulse_0 && pulse_1){
 		j++;
