@@ -23,6 +23,8 @@ int clock_calendar(void);
 int establecer_fecha(int x, int y, int parameter);
 int dec_to_bcd(int num);
 int bcd_to_dec(int num);
+void save_memory(void);
+void load_memory(void);
 
 int anti_rebote(void){ 
 	int cont = 0;
@@ -162,7 +164,26 @@ int ndays(int month, int year) {
         return (31);
 } 
 
+void save_memory(){
+	write_eeprom(0, year);
+	write_eeprom(1, month);
+	write_eeprom(2, day);
+	write_eeprom(3, hour);
+	write_eeprom(4, min);
+}
+
+void load_memory(){
+	year = write_eeprom(0);
+	month = write_eeprom(1);
+	day = write_eeprom(2);
+	hour = write_eeprom(3);
+	min = write_eeprom(4);
+}
+
 int main(){
+	set_tris_a(0xFF);
+	set_tris_b(0);
+	set_tris_d(0);
 	lcd_init();
 	while(true){
 		if(!pulse_1)
