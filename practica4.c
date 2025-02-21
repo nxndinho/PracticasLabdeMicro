@@ -201,7 +201,7 @@ int main(){
 			sec = dec_to_bcd(sec);
 			year = dec_to_bcd(year);
 			month = dec_to_bcd(month);
-			day = dec_bcd(day);
+			day = dec_to_bcd(day);
 			save_memory();
 		}
 		load_memory();
