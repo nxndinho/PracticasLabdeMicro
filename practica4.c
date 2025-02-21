@@ -16,7 +16,7 @@
 #define pulse_3 PIN_A3	//To stop the alarm.
 
 //Declaracion de Funciones
-int sec, min, hour, day, month, year, cont, parameter, antirebote, ndays;
+int sec, min, hour, day, month, year, cont, parameter, antirebote, ndays, i;
 int anti_rebote(void);
 int blink(void);
 int clock_calendar(void);
