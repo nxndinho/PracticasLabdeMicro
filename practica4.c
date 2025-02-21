@@ -175,11 +175,11 @@ void save_memory(){
 }
 
 void load_memory(){
-	year = write_eeprom(0);
-	month = write_eeprom(1);
-	day = write_eeprom(2);
-	hour = write_eeprom(3);
-	min = write_eeprom(4);
+	year = read_eeprom(0);
+	month = read_eeprom(1);
+	day = read_eeprom(2);
+	hour = read_eeprom(3);
+	min = read_eeprom(4);
 }
 
 int main(){
