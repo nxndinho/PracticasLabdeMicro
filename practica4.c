@@ -202,5 +202,10 @@ int main(){
 			year = dec_to_bcd(year);
 			month = dec_to_bcd(month);
 			day = dec_bcd(day);
-			
+			save_memory();
+		}
+		load_memory();
+
+		clock_calendar();
+	}
 }
