@@ -17,7 +17,7 @@
 
 //Declaracion de Funciones
 int sec, min, hour, day, month, year, cont, parameter, antirebote, ndays, i;
-void anti_rebote(void);
+int anti_rebote(void);
 void blink(void);
 void clock_calendar(void);
 int establecer_fecha(int x, int y, int parameter);
