@@ -92,7 +92,7 @@ void blink(void){
 }
 //X & Y son las coordenadas en el LCD.
 int establecer_fecha(int x, int y, int parameter){
-	while(anti_rebote(result)); //Mientras devuelva un 1.
+	while(anti_rebote()); //Mientras devuelva un 1.
 	while(true){
 		while(!pulse_1){
 			parameter++;
@@ -116,7 +116,7 @@ int establecer_fecha(int x, int y, int parameter){
 			blink();
 
 			if(!pulse_1)
-			if(anti_rebote(result)){
+			if(anti_rebote()){
 				i++;
 				return parameter;
 			}
@@ -189,7 +189,7 @@ int main(){
 	lcd_init();
 	while(true){
 		if(!pulse_1)
-		if(anti_rebote(result)){
+		if(anti_rebote()){
 			i = 0;
 			hour = establecer_fecha(1,1,hour);
 			min = establecer_fecha(4,1,min);
@@ -197,7 +197,7 @@ int main(){
 			year = establecer_fecha(3,2,year);
 			month = establecer_fecha(6,2,month);
 			day = establecer_fecha(9,2,day);
-			while(anti_rebote(result));
+			while(anti_rebote());
 			hour = dec_to_bcd(hour);
 			min = dec_to_bcd(min);
 			sec = dec_to_bcd(sec);
