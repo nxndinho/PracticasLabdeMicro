@@ -1,8 +1,8 @@
 #include <16f877a.h>
+#use delay(clock=4000000)
 #include <lcd.c>
 #include <stdio.h>
 #include <stdint.h>
-#use delay(clock=4000000)
 #define USE_PORTB_LCD TRUE	//Habilita uso en PORTB para LCD
 #fuses xt, noprotect, nowdt, nobrownout, put, nolvp
 #BYTE PORTA = 5
