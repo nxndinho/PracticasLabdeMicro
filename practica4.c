@@ -94,7 +94,7 @@ void blink(void){
 int establecer_fecha(int x, int y, int parameter){
 	while(anti_rebote()); //Mientras devuelva un 1.
 	while(true){
-		while(!pulse_1){
+		while(bit_test(pulse_1) == 0){
 			parameter++;
 			if(i==0 && parameter>99){ //Years.
 				parameter = 0;
@@ -115,7 +115,7 @@ int establecer_fecha(int x, int y, int parameter){
 			LCD_PUTC(parameter % 10 + '0');
 			blink();
 
-			if(!pulse_1)
+			if(bit_test(pulse_1) == 0)
 			if(anti_rebote()){
 				i++;
 				return parameter;
@@ -188,7 +188,7 @@ void main(void){
 	set_tris_d(0);
 	lcd_init();
 	while(true){
-		if(!pulse_1)
+		if(bit_test(pulse_1) == 0)
 		if(anti_rebote()){
 			i = 0;
 			hour = establecer_fecha(1,1,hour);
