@@ -208,20 +208,25 @@ void alarma() {
   }
 
   // Ciclo entre los modos al presionar el pulsador 0.
-  void modecycle() {
-    mode++;
+void modecycle(){ //Rutina para hacer el ciclo entre los modos al presionar el botón SW1
+   mode++;
+  
+   if(mode >=5){ //El programa trabaja los modos del 0 al 4. Si se pasa de 4, devolver al modo 0.
+   mode = 0;
+      
+   if(BIT_TEST(change)){ //Si está activada la bandera de que se han hecho cambios (en los modos 2, 3 o 4), se procede a guardar en la EEPROM, y se borra la bandera.
+                       //Esta bandera impide que el programa guarde en la EEPROM si no se ha cambiado nada en la configuración.
+      BIT_CLEAR(change);
+      save_memory();
+      
+      }
+   }
+   
+   PORTB = DISPLAY[mode];
+   
+   BIT_SET(change); 
+}
 
-    if (mode >= 5) {
-      mode = 0;
-
-                if(bit_test(change){
-        bit_clear(change);
-        save_memory();
-		}
-    }
-    PORTB = DISPLAY[mode];
-    bit_set(change);
-  }
 
   void display() {
     if (bit_test(mode_change)) {
