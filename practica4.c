@@ -243,7 +243,7 @@ void modecycle(){ //Rutina para hacer el ciclo entre los modos al presionar el b
       if (hour == 0) {
         printf(lcd_putc, "12:%02d:%02d", min, sec);
       } else {
-        print(lcd_putc, "%02d:%02d:%02d", hour, min, sec);
+        printf(lcd_putc, "%02d:%02d:%02d", hour, min, sec);
       }
       if (am == 0) {
         lcd_putc("AM");
@@ -274,7 +274,7 @@ void modecycle(){ //Rutina para hacer el ciclo entre los modos al presionar el b
       lcd_putc("ALARMA ");
 
       if (ahour == 0) {
-        printf(lcd_putc, "12:02d", amin);
+        printf(lcd_putc, "12:%02d", amin);
       } else {
         printf(lcd_putc, "%02d:%02d", ahour, amin);
       }
@@ -291,7 +291,7 @@ void modecycle(){ //Rutina para hacer el ciclo entre los modos al presionar el b
       if (hour == 0) {
         printf(lcd_putc, "12:%02d:%02d", min, sec);
       } else {
-        print(lcd_putc, "%02d:%02d:%02d", hour, min, sec);
+        printf(lcd_putc, "%02d:%02d:%02d", hour, min, sec);
       }
       if (am == 0) {
         lcd_putc("AM");
