@@ -39,6 +39,7 @@ void display();
 void modecycle();
 void save_memory();
 void load_memory();
+void anti_rebote();
 
 // Control del timer.
 #INT_RTCC
@@ -230,7 +231,7 @@ void modecycle(){ //Rutina para hacer el ciclo entre los modos al presionar el b
 
   void display() {
     if (bit_test(mode_change)) {
-                lcd_putc('\f");
+                lcd_putc("\f");
 		bit_clear(mode_change);
     }
 
@@ -345,8 +346,8 @@ void modecycle(){ //Rutina para hacer el ciclo entre los modos al presionar el b
     mode = 0;
     SWFLAGS = 0;
     FLAGS = 0;
-    setup_timer_2(T2_DIV_4, 0xF9, 1);
-    setupccp2(ccp_pwm);
+    setup_timer_2(T2_DIV_BY_4, 0xF9, 1);
+    //setupccp2(ccp_pwm);
 
     while (true) {
       timer();
@@ -377,7 +378,7 @@ void modecycle(){ //Rutina para hacer el ciclo entre los modos al presionar el b
 
             case 3:
               day++;
-                        if(day > array_month[month]{
+                        if(day > array_month[month]){
                 day = 1;
 			}
 			bit_set(change);
