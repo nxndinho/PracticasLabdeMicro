@@ -10,22 +10,22 @@
 #byte PORTD = 8
 
 // Definicion de puertos de entrada.
-#define pulse_0 PORTA, 0
-#define pulse_1 PORTA, 1
-#define pulse_2 PORTA, 2
-#define pulse_3 PORTA, 3
-#define pulse_hold SWFLAGS, 0
-#define pulse_ok SWFLAGS, 1  // switch ok
-#define pulse_not SWFLAGS, 2 // switch not realesed
+#define pulse_0 PORTA,0
+#define pulse_1 PORTA,1
+#define pulse_2 PORTA,2
+#define pulse_3 PORTA,3
+#define pulse_hold SWFLAGS,0
+#define pulse_ok SWFLAGS,1  // switch ok
+#define pulse_not SWFLAGS,2 // switch not realesed
 // Definicion de LED alarma.
-#define led PORTD, 7
+#define led PORTD,7
 
 // Definicion de variables condicionales.
-#define stop_sectimer FLAGS, 0
-#define alarm_on FLAGS, 1
-#define change FLAGS, 2
-#define mode_change FLAGS, 3
-#define alarm FLAGS, 4
+#define stop_sectimer FLAGS,0
+#define alarm_on FLAGS,1
+#define change FLAGS,2
+#define mode_change FLAGS,3
+#define alarm FLAGS,4
 
 // Declaracion de funciones.
 int sec, min, hour, day, month, year;
