@@ -138,16 +138,16 @@ void guardar_alarma(){
 }
 //Funcion de lectura de EEPROM para las variables de alarma.
 void leeralarma(){
-      hr_alarma=READ_EEPROM(16);
-      m_alarma=READ_EEPROM(17);
-      h_alarma=READ_EEPROM(19);
-      strcpy(ampm_alarma, READ_EEPROM(20)); //Si la condicion es AM.
-      strcpy(ampm_alarma, READ_EEPROM(23)); //Si la condicon es PM.
+    hr_alarma=READ_EEPROM(16);
+    m_alarma=READ_EEPROM(17);
+    h_alarma=READ_EEPROM(19);
+    strcpy(ampm_alarma, READ_EEPROM(20)); //Si la condicion es AM.
+    strcpy(ampm_alarma, READ_EEPROM(23)); //Si la condicon es PM.
 }
-
+//Funcion de lectura de fecha.
 void leerfecha(){
   DD = READ_EEPROM(13);
-       MT = READ_EEPROM(14);
+  MT = READ_EEPROM(14);
         AA = READ_EEPROM(15);
 }
 void reloj(){
