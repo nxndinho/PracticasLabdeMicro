@@ -60,7 +60,7 @@ void timer_reloj(void)
                     DD=1;
                     MT++;
                 }
-            }else{
+            }else{ //Si no se cumple la condicion seran 28.
                 if(DD>28){
                   DD=1;
                   MT++;
@@ -138,81 +138,74 @@ void guardar_alarma(){
 }
 //Funcion de lectura de EEPROM para las variables de alarma.
 void leeralarma(){
-    hr_alarma=READ_EEPROM(16);
-    m_alarma=READ_EEPROM(17);
-    h_alarma=READ_EEPROM(19);
-    strcpy(ampm_alarma, READ_EEPROM(20)); //Si la condicion es AM.
-    strcpy(ampm_alarma, READ_EEPROM(23)); //Si la condicon es PM.
+    hr_alarma=read_eeprom(16);
+    m_alarma=read_eeprom(17);
+    h_alarma=read_eeprom(19);
+    strcpy(ampm_alarma, read_eeprom(20)); //Si la condicion es AM.
+    strcpy(ampm_alarma, read_eeprom(23)); //Si la condicon es PM.
 }
 //Funcion de lectura de fecha.
 void leerfecha(){
-  DD = READ_EEPROM(13);
-  MT = READ_EEPROM(14);
-        AA = READ_EEPROM(15);
+  DD = read_eeprom(13); //Dia.
+  MT = read_eeprom(14); //Mes.
+  AA = read_eeprom(15); //Ano.
 }
+//Funcion para el display del reloj en el LCD.
 void reloj(){
-      lcd_gotoxy(1,1);
-      if(h<12){
-      ampm="AM";
-      if(h==0){
-      hr=h+12;
-      printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
- 
-      }
-      else
-       printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
-
-      }
-      else if(h==12) {
-      ampm="PM";
-        printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
-  
-      }
-      else if(h>12 && h<24){
-      ampm="PM";
-      hr=h-12;
-       printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
-   
-      }
-      else if(h>=24){
-      ampm="AM";
-      h=0;
-      hr=h+12;
-        printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+    lcd_gotoxy(1,1); //Columna 1, Fila 1.
+    //Print para AM.
+        if(h<12){
+            ampm="AM";
+            if(h==0){
+                hr=h+12;
+                printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+            }else
+                printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
+        }
+        //Print para PM
+        else if(h==12) {
+            ampm="PM";
+            printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
+        }else if(h>12 && h<24){
+            ampm="PM";
+            hr=h-12;
+            printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+      }else if(h>=24){ //Overflow de PM a AM en el display.
+            ampm="AM";
+            h=0;
+            hr=h+12;
+            printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
       }     
 }
+//Funcion para el display de alarma en el LCD.
 void alarma(){  
-lcd_gotoxy(1,2);
-      if(h_alarma<12){
-    ampm_alarma="AM";
-      if(h_alarma==0){
-      hr_alarma=h_alarma+12;
-      printf (lcd_putc,"%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
- 
-      }
-      else
-      printf(lcd_putc,"%02d:%02d %s",h_alarma,m_alarma,ampm_alarma);
-  
-      }
-      else if(h_alarma==12) {
-      ampm_alarma="PM";
-      printf (lcd_putc,"%02d:%02d %s",h_alarma,m_alarma,ampm_alarma);
-      write_eeprom(6,ampm);
-      }
-      else if(h_alarma>12 && h_alarma<24){
-      ampm_alarma="PM";
-      hr_alarma=h_alarma-12;
-      printf (lcd_putc,"%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
-
-      }
-      else if(h_alarma>=24){
-      ampm_alarma="AM";
-      h_alarma=0;
-      hr_alarma=h_alarma+12;
-      printf(lcd_putc, "%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
-
+    lcd_gotoxy(1,2); //Columna 1, Fila 2.
+    //Print para AM en la alarma.
+        if(h_alarma<12){
+            ampm_alarma="AM";
+            if(h_alarma==0){
+                hr_alarma=h_alarma+12;
+                printf (lcd_putc,"%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
+            }else
+                printf(lcd_putc,"%02d:%02d %s",h_alarma,m_alarma,ampm_alarma);
+        }
+        //Print para PM en la alarma.
+        else if(h_alarma==12) {
+            ampm_alarma="PM";
+            printf (lcd_putc,"%02d:%02d %s",h_alarma,m_alarma,ampm_alarma);
+            write_eeprom(6,ampm);
+        }else if(h_alarma>12 && h_alarma<24){
+            ampm_alarma="PM";
+            hr_alarma=h_alarma-12;
+            printf (lcd_putc,"%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
+        }else if(h_alarma>=24){
+            ampm_alarma="AM";
+            h_alarma=0;
+            hr_alarma=h_alarma+12;
+            printf(lcd_putc, "%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
       }
 }
+//Funcion para display de fecha en el LCD 
 void mostrar_fecha(){
    
   lcd_gotoxy(1,2);
