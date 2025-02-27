@@ -223,7 +223,7 @@ void mostrar_fecha(){
 void ajuste_fecha(){
     //Boton A1 para la config. de dias.
     if(input(PIN_A1)){
-        delay_ms(150);
+        delay_ms(150); //filtro anti-rebote
         DD++;
         //Ajuste de seleccion de dia para ano bisiesto.
         //Mes de Febrero.
@@ -254,7 +254,7 @@ void ajuste_fecha(){
     }
     //Boton A2 para la config. de mes.
     if(input(PIN_A2)){
-        delay_ms(150);
+        delay_ms(150); //filtro anti-rebote
         MT++;
         if(MT>12){ //Al sonbre pasar 12, volver a 1.
             MT=1;
@@ -262,7 +262,7 @@ void ajuste_fecha(){
     } 
     //Boton A3 para la config. de ano.
     if(input(PIN_A3)){
-        delay_ms(150);
+        delay_ms(150); //filtro anti-rebote
         AA++;
         if(AA>99){ //Al sobre pasar volver 99, volver a 00.
             AA=00; //Ya que el ano parte del ano 2000.
@@ -401,7 +401,7 @@ void ajuste_hora() {
 void ajuste(){
     int8 valh1=0,valh2=0,valh3=0,valh4=0; //Variables de control de ajuste
     if(input(pin_A0) == 1){
-        delay_ms(400);
+        delay_ms(400); //filtro anti-rebote
         valh3 = 1;
     }
     do{
@@ -468,7 +468,7 @@ void ajuste(){
 //Cambio de fila 2 para mostrar la fecha
 void modo_hora_fecha(){
     if (input(pin_A3) == 1) { //modo hora/fecha 
-        delay_ms(450);
+        delay_ms(450); //filtro anti-rebote
         valh11 = 1;
         LCD_PUTC('\f');
     }
