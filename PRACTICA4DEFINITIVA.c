@@ -398,138 +398,119 @@ void ajuste_hora() {
     }
     delay_ms(250);
 }
-
+//Funcion de ajuste master.
 void ajuste(){
-int8 valh1=0,valh2=0,valh3=0,valh4=0; //Variables de control de ajuste
-if (input(pin_A0) == 1) {
-delay_ms(400);
-valh3=1;
-}
-            do {
-                if(valh3==1){
-                S1=0;
-                S2=0;
-         valh4=1;
-          LCD_PUTC('\f');
-            }
-
-            while (valh3==1 && valh4==1) {
-             disable_interrupts(int_timer0);
-                delay_ms(100);
-                ampm = "AM"; // inicializar ampm con "AM"    
-                ajuste_hora();
-   
-                  if (input(pin_A0) == 1) {
-                  disable_interrupts(int_timer0);
-                    valh4 = 0;
-                    valh1= 1;
-                     LCD_PUTC('\f');
-                }
-                   }
-            while (valh1 == 1) {
-            disable_interrupts(int_timer0);
-             delay_ms(300);
-             ajuste_alarma();
-                 
-                  if (input(pin_A0) == 1) {
-                  disable_interrupts(int_timer0);
-                   guardar_alarma();
-                    valh1 = 0;
-                     valh2 = 1;
-                     if (DD != 1 || MT != 1|| AA != 0) {
-                   DD=1;
-                     MT=1;
-                       AA=0;
-                     }
-                     LCD_PUTC('\f');
-                }
-              
-            }
-    while (valh2 == 1) { 
-      disable_interrupts(int_timer0);
-      ENABLE_interrupts(int_timer2);
-      delay_ms(200);
-    LCD_GOTOXY(1,1);
-    LCD_PUTC("AJUSTE FECHA");
-    ajuste_fecha();
-
-        if (input(pin_A0) == 1) {
-      ENABLE_interrupts(int_timer0);
-         WRITE_EEPROM(13,DD);
-         WRITE_EEPROM(14,MT);
-         WRITE_EEPROM(15,AA);
-        valh3= 0;
-        valh4= 0;
-        valh2= 0;
-        LCD_PUTC('\f');
+    int8 valh1=0,valh2=0,valh3=0,valh4=0; //Variables de control de ajuste
+    if(input(pin_A0) == 1){
         delay_ms(400);
+        valh3 = 1;
+    }
+    do{
+        if(valh3==1){
+        S1 = 0;
+        S2 = 0;
+        valh4 = 1;
+        LCD_PUTC('\f');
+        }
+        while(valh3==1 && valh4==1){
+            disable_interrupts(int_timer0);
+            delay_ms(100);
+            ampm = "AM"; // inicializar ampm con "AM"    
+            ajuste_hora();
+            if(input(pin_A0) == 1){
+                disable_interrupts(int_timer0);
+                    valh4 = 0;
+                    valh1 = 1;
+                    LCD_PUTC('\f');
+            }
+        }
+        while(valh1 == 1){
+            disable_interrupts(int_timer0);
+            delay_ms(300);
+            ajuste_alarma();
+                 
+            if(input(pin_A0) == 1){
+                disable_interrupts(int_timer0);
+                guardar_alarma();
+                valh1 = 0;
+                valh2 = 1;
+                if(DD != 1 || MT != 1|| AA != 0){
+                    DD=1;
+                    MT=1;
+                    AA=0;
+                }
+                LCD_PUTC('\f');
+            }  
+        }
+        
+        while(valh2 == 1){ 
+            disable_interrupts(int_timer0);
+            ENABLE_interrupts(int_timer2);
+            delay_ms(200);
+            LCD_GOTOXY(1,1); //Columna 
+            LCD_PUTC("AJUSTE FECHA");
+            ajuste_fecha();
+                if(input(pin_A0) == 1){
+                    ENABLE_interrupts(int_timer0);
+                    //Guardado de Fecha a la memoria.
+                    write_eeprom(13,DD);
+                    write_eeprom(14,MT);
+                    write_eeprom(15,AA);
+                    valh3= 0;
+                    valh4= 0;
+                    valh2= 0;
+                    LCD_PUTC('\f');
+                    delay_ms(400);
+                }
+        }
+    }  
+    while(valh3==1);{}         
+}
+//Cambio de fila 2 para mostrar la fecha
+void modo_hora_fecha(){
+    if (input(pin_A3) == 1) { //modo hora/fecha 
+        delay_ms(450);
+        valh11 = 1;
+        LCD_PUTC('\f');
+    }
+    while (valh11 == 1) { 
+        mostrar_fecha();
+        reloj(); 
+        if(input(pin_A3) == 1){
+            delay_ms(450);
+            valh11 = 0;
+            LCD_PUTC('\f');
+        }
     }
 }
-}  
-  while(valh3==1);{}         
-}
-void modo_hora_fecha(){
 
-      if (input(pin_A3) == 1) { //modo hora/fecha 
-        delay_ms(450);
-   valh11 = 1;
-   LCD_PUTC('\f');
-}
-
-while (valh11 == 1) { 
-       mostrar_fecha();
-       reloj(); 
-      if(input(pin_A3) == 1){
-        delay_ms(450);
-      valh11=0;
-      LCD_PUTC('\f');
-      }
-   }
- }
 void main() {
- 
-   configuracion();
-   
-   configuracion2();
-   
+    configuracion();
+    configuracion2();
+    set_tris_c(0x00); //LED Alarma.
+    set_tris_a(0xFF); //Botones.
+    set_tris_b(0x00); //LCD Display.
+    output_b(0x00);
 
-   //Puerto de alarma
-    set_tris_c(0x00);
-   //Puerto de los botones
-   set_tris_b(0x07);
-   //Puerto del lcd
-   set_tris_d(0x00);
-   //Establecemos puerto D como salida
-   output_d(0x00);
-    
-   // Inicializamos la lcd
-   lcd_init();
-    //leer el valor de la alarma guardada
-   leeralarma();
-    //leer el valor de la fecha guardada
-   leerfecha();
-   //LED DE ALARMA(SPEAKER) apagado 
-   BIT_CLEAR(LEDALAR);
+    lcd_init();
+    leeralarma();
+    leerfecha();
+    BIT_CLEAR(LEDALAR); //LED Alarma inicia apagada
             
-while (TRUE) {
-  disable_interrupts(int_timer2); 
- //AJUSTE
-  ajuste();
-    //RELOJ
-      reloj();
-       //ALARMA
-         alarma();
-         
-     //ENCENDER LED SI SE CUMPLEN RELOJ=ALARMA
-       if((hr_alarma == hr) && (m_alarma == M)) {
-                BIT_SET(LEDALAR);
-      }
-      else{
-          BIT_CLEAR(LEDALAR);
-            lcd_gotoxy(2,2);
-             printf (lcd_putc," ");
-             }
-                 //MODO HORA/CALENDARIO
-                    modo_hora_fecha();     
-      }    
+    while (TRUE) {
+        disable_interrupts(int_timer2);
+        //Llama las funciones y se ejecutan.
+        ajuste();
+        reloj();
+        alarma();
+        //Endendido de LED cuando se cumpla la hora y minuto indicado.
+        if((hr_alarma == hr) && (m_alarma == M)) {
+            BIT_SET(LEDALAR);
+        }else{
+            BIT_CLEAR(LEDALAR);
+            lcd_gotoxy(2,2); //Columna 2, Fila 2
+            printf (lcd_putc," ");
+        }
+            modo_hora_fecha();     
+    }    
 }   
