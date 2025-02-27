@@ -3,7 +3,6 @@
 #use delay(clock=4000000)
 #define use_portb_lcd TRUE //Se habilita el PORTB para conectar el LCD.
 #include <LCD.c>
-
 #byte PORTA = 5
 #byte PORTB = 6
 #byte PORTC = 7
@@ -153,7 +152,9 @@ void leerfecha(){
 }
 //Funcion para el display del reloj en el LCD.
 void reloj(){
-    lcd_gotoxy(1,1); //Columna 1, Fila 1.
+    lcd_gotoxy(1,1);
+    printf(lcd_putc,"HORA");
+    lcd_gotoxy(6,1); //Columna 6, Fila 1.
     //Print para AM.
         if(h<12){
             ampm = "AM";
@@ -180,7 +181,9 @@ void reloj(){
 }
 //Funcion para el display de alarma en el LCD.
 void alarma(){  
-    lcd_gotoxy(1,2); //Columna 1, Fila 2.
+    lcd_gotoxy(1,2);
+    printf(lcd_putc,"ALARMA");
+    lcd_gotoxy(9,2); //Columna 9, Fila 2.
     //Print para AM en la alarma.
         if(h_alarma<12){
             ampm_alarma="AM";
@@ -208,15 +211,17 @@ void alarma(){
 }
 //Funcion para display de fecha en el LCD 
 void mostrar_fecha(){
-    lcd_gotoxy(1,2); //Columna 1, Fila 2.
+    lcd_gotoxy(1,2);
+    printf(lcd_putc,"FECHA");
+    lcd_gotoxy(7,2); //Columna 7, Fila 2.
         printf(lcd_putc,"%02i",DD); //Dias.
-        lcd_gotoxy(3,2); //Columna 3, FIla 2.
+        lcd_gotoxy(9,2); //Columna 9, FIla 2.
         lcd_putc("/");
-        lcd_gotoxy(4,2); //Columna 4, Fila 2.
+        lcd_gotoxy(10,2); //Columna 10, Fila 2.
         printf(lcd_putc,"%02i",MT); //Mes.
-        lcd_gotoxy(6,2);//Columna 6, Fila 2.
+        lcd_gotoxy(12,2);//Columna 12, Fila 2.
         lcd_putc("/");
-        lcd_gotoxy(7,2); //Columna 7, Fila 2.
+        lcd_gotoxy(13,2); //Columna 13, Fila 2.
         printf(lcd_putc,"20%02i",AA); //Ano.
 }
 //Funciona de ajuste de fecha.
@@ -351,7 +356,7 @@ void ajuste_hora() {
     if(input(pin_A1) == 1){ 
         h++;
         if(h < 12){ //Indicador de AM.
-        	ampm = "AM";
+           ampm = "AM";
             if (h == 0){
                 hr = h + 12;
                 printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
