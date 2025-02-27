@@ -275,7 +275,7 @@ void ajuste_fecha(){
 }
 //Funcion ajuste de alarma
 void ajuste_alarma(){
-   lcd_gotoxy(1,1); //Columna 1, Fila 1.
+    lcd_gotoxy(1,1); //Columna 1, Fila 1.
             lcd_putc("AJUSTE ALARMA:");
             lcd_gotoxy(6,2); //Columna 6, Fila 2.
             printf(lcd_putc,"");
@@ -323,87 +323,82 @@ void ajuste_alarma(){
             delay_ms(100);
             } 
 }
-
+//Funcion de ajuste de hora.
 void ajuste_hora() {
- lcd_gotoxy(1,1); 
-  lcd_putc("AJUSTE HORA:");    
-  lcd_gotoxy(6,2);
+    lcd_gotoxy(1,1); //Columna 1, Fila 1.
+    lcd_putc("AJUSTE HORA:");    
+    lcd_gotoxy(6,2); //Columna 6, Fila 2.
     printf(lcd_putc,"");
-         if (input(pin_A3) == 1) {
-    S1++;
-   
-    if (S1 == 10) {
-        S1 = 0;
-        S2++;
-    }
-        if (S2 == 6) {
+    //Boton A3 para ajuste de segundos.
+    if(input(pin_A3) == 1){
+        S1++;
+        if (S1 == 10) { //Overflow del primer digito de segundos.
+            S1 = 0;
+            S2++;
+        }
+        if(S2 == 6){ //Reset del segundo digito para no exceder 60s.
             S2 = 0;
         }
         delay_ms(70);
-       
-      }  
-                    if (input(pin_A2) == 1) {
-    M++;
-   if(M>59){
-   M=0;
-   }           
+    }  
+    //Boton A2 para ajuste de de minutos.
+    if(input(pin_A2) == 1){
+        M++;
+        if(M>59){ //Reset del contador si excede a 59m.
+            M=0;
+        }           
     }
-            if (input(pin_A1) == 1) { 
-               h++;
-               if (h < 12) {
-                  ampm = "AM";
-                  if (h == 0) {
-                     hr = h + 12;
-                        printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
-                  } 
-                  else {
-              printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
-                  }
-               } 
-               else if (h == 12) {
-                  ampm = "PM";
-                      printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
-               } 
-               else if (h > 12 && h < 24) {
-                  ampm = "PM";
-                  hr = h - 12;
-                      printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
-               } 
-               else if (h >= 24) {
-                  ampm = "AM";
-                  h = 0;
-                  hr = h + 12;
-                       printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
-               }
-               delay_ms(120);
+    //Boton A1 para ajuste de horas.
+    if(input(pin_A1) == 1){ 
+        h++;
+        if(h < 12){ //Indicador de AM.
+        	ampm = "AM";
+            if (h == 0){
+                hr = h + 12;
+                printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+            }else{
+                printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
             }
- if (h < 12) {
-                  ampm = "AM";
-                  if (h == 0) {
-                     hr = h + 12;
-                      printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
-                  } 
-                  else {
-             printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
-                  }
-               } 
-               else if (h == 12) {
-                  ampm = "PM";
-                     printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
-               } 
-               else if (h > 12 && h < 24) {
-                  ampm = "PM";
-                  hr = h - 12;
-                      printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
-               } 
-               else if (h >= 24) {
-                  ampm = "AM";
-                  h = 0;
-                  hr = h + 12;
-                       printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
-               }
-               delay_ms(250);
+        }else if(h == 12){ //Indicador de PM
+            ampm = "PM";
+            printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
+        }else if(h > 12 && h < 24) { //Limite para mantener el valor de PM.
+            ampm = "PM";
+            hr = h - 12;
+            printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+        } else if(h >= 24){ //Overflow a AM al exceder.
+            ampm = "AM";
+            h = 0;
+            hr = h + 12;
+            printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+        }
+        delay_ms(120);
+    }
+    //Chequear funcion!!!
+    if(h < 12){
+        ampm = "AM";
+        if(h == 0){
+            hr = h + 12;
+            printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+        }else{
+            printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
+        }
+    }else if(h == 12){
+        ampm = "PM";
+        printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
+    }else if(h > 12 && h < 24){
+        ampm = "PM";
+        hr = h - 12;
+        printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+    }else if(h >= 24){
+        ampm = "AM";
+        h = 0;
+        hr = h + 12;
+        printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+    }
+    delay_ms(250);
 }
+
 void ajuste(){
 int8 valh1=0,valh2=0,valh3=0,valh4=0; //Variables de control de ajuste
 if (input(pin_A0) == 1) {
