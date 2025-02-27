@@ -109,13 +109,12 @@ void TIMER2_isr(void){
                 }
             }
         }
-             
         if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
             if(DD>31){
                 DD = 1;
             }
         }
-            if(MT==4 || MT==6 || MT==9 || MT==11){
+        if(MT==4 || MT==6 || MT==9 || MT==11){
                 if(DD>30){
                     DD = 1;
                 }
