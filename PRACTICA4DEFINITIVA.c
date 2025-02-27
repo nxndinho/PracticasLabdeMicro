@@ -4,7 +4,9 @@
 #define use_portb_lcd TRUE //Se habilita el PORTB para conectar el LCD.
 #include <LCD.c>
 
-#byte PORTC=7
+#byte PORTA = 5
+#byte PORTB = 6
+#byte PORTC = 7
 #define LEDALAR PORTC,4
 
 //Declaracion de variables
