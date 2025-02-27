@@ -52,9 +52,9 @@ void timer_reloj(void)
             if(h==24){//Overflow de horas a dias.
               h = 00;
               DD++;
-              }
+            }
          }
-        }
+    }
      //Se establecen los dias para el ano bisiesto.
         if(MT==2){
             if(AA%4==0){
