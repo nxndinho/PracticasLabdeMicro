@@ -1,111 +1,94 @@
-#include <16F877A.h> //Libreria del PIC a utilizar
+#include <16F877A.h> 
 #fuses XT,NOWDT,NOPUT,NOLVP,NOPROTECT,BROWNOUT,NOCPD
-#use delay(clock=4000000) //Cristal externo de 4MHz
-#define use_portb_lcd TRUE //Define Puertas "D" Para salidas hacia el LCD
-#include <LCD.c> //Libreria deL PIC a utilizar
+#use delay(clock=4000000)
+#define use_portb_lcd TRUE //Se habilita el PORTB para conectar el LCD.
+#include <LCD.c>
+
 #byte PORTC=7
 #define LEDALAR PORTC,4
+
+//Declaracion de variables
 int8 valh11=0;
-int h=0,hr=0,S1=0,S2=0,M=0; //horas
+int h=0,hr=0,S1=0,S2=0,M=0; 
 int m_alarma=0,h_alarma=0,hr_alarma=0;
 int DD=1,MT=1,AA=0;
-char ampm[3] = "AM"; // inicializar con "AM"
+char ampm[3] = "AM";
 char ampm_alarma[3];
 int8 desbordamiento=0;
-void configuracion2(void)
- {
+
+//Se configuran los timers e interrupciones del programa a 10ms
+void configuracion2(void){
   setup_timer_2(T2_DIV_BY_16,209,3);  
-   set_timer0(210);                             //Establecemos el timer0 a 217 para obtener 10ms
-   enable_interrupts(global);                   //Habilitamos todas las interrupciones del PIC
-   enable_interrupts(int_timer2);               //Habilitamos la interrupci髇 del timer0
+   set_timer0(210);                             
+   enable_interrupts(global);                   
+   enable_interrupts(int_timer2);               
  }
-void configuracion(void)
- {
-   setup_timer_0(RTCC_INTERNAL|RTCC_DIV_256|RTCC_8_BIT);    //Preescaler 256 Timer0 
-   set_timer0(217);                             //Establecemos el timer0 a 217 para obtener 10ms
-   enable_interrupts(global);                   //Habilitamos todas las interrupciones del PIC
-   enable_interrupts(int_timer0);               //Habilitamos la interrupci髇 del timer0
+void configuracion(void){
+   setup_timer_0(RTCC_INTERNAL|RTCC_DIV_256|RTCC_8_BIT);    
+   set_timer0(217);                             
+   enable_interrupts(global);                   
+   enable_interrupts(int_timer0);               
  }
+
 #int_timer0
 void timer_reloj(void)
 {
    desbordamiento++;
-   if(desbordamiento==100)
-   {
-      desbordamiento=0;
+   if(desbordamiento==100){ //Establece para contar a S1 cada 1s.
+     desbordamiento=0;
      S1++;
-      if(S1==10)
-      {
+      if(S1==10){//Overflow para el primer digito de cada segundo.
          S1=0;
          S2++;
-         if(S2==6)
-         {
+         if(S2==6){
             S2=0;
             M++;
             if(M>59){
-            M=0;
-                  h++;
-                  
-                 
+                  M=0;
+                  h++;   
             }
-                  if(h==24){
-      h=00;
-      DD++;
-      }
-     
-               }
-               
-            }
-            if(MT==2)
-               {
-          
-                  if(AA%4==0)
-                  {
-                     if(DD>29)
-                     {
+            if(h==24){
+                  h=00;
+                  DD++;
+              }
+         }
+        }
+        if(MT==2){
+            if(AA%4==0){
+                if(DD>29){
+                    DD=1;
+                    MT++;
+                }
+            }else{
+                if(DD>28){
                         DD=1;
                         MT++;
                      }
                   }
-                  else
-                  {
-                     if(DD>28)
-                     {
-                        DD=1;
-                         MT++;
-                     }
-                  }
                }
-             
-               if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12)
-               {
-                  if(DD>31)
-                  {
-                     DD=1;
-                      MT++;
-                  }
-               }
-               if(MT==4 || MT==6 || MT==9 || MT==11)
-               {
-                  if(DD>30)
-                  {
-                     DD=1;
-                      MT++;
-                  }
-               }
-              if(MT>12)
-               {
-                  MT=1;
-                  AA++;
-               } 
+       //Se establecen los meses que contienen hasta el dia 31.
+        if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
+            if(DD>31){
+                DD=1;
+                MT++;
             }
-    
-          
-         
-      
-  
+        }
+       //Se establecen los meses que contienen hasta el dia 30.
+        if(MT==4 || MT==6 || MT==9 || MT==11){
+            if(DD>30){
+                DD=1;
+                MT++;
+            }
+        }
+       //Overflow de mes, a anos.
+        if(MT>12){
+            MT=1;
+            AA++;
+        } 
+    } 
    set_timer0(217);
 }
+
 #INT_TIMER2
 void TIMER2_isr(void){
 
@@ -161,11 +144,11 @@ void guardar_alarma(){
  WRITE_EEPROM(16, hr_alarma);
  WRITE_EEPROM(17,m_alarma);
  WRITE_EEPROM(19,h_alarma);
- WRITE_EEPROM(20, 'A');  // Escribir el primer byte en la direcci髇 0
+ WRITE_EEPROM(20, 'A');  // Escribir el primer byte en la direcci贸n 0
 WRITE_EEPROM(21, 'M');
-write_eeprom(22, '\0');// Escribir el segundo byte en la direcci髇 1
-WRITE_EEPROM(23, 'P'); // Escribir el byte nulo en la direcci髇 2 para indicar el final de la cadena
-WRITE_EEPROM(24, 'M'); // Escribir el byte nulo en la direcci髇 2 para indicar el final de la cadena
+write_eeprom(22, '\0');// Escribir el segundo byte en la direcci贸n 1
+WRITE_EEPROM(23, 'P'); // Escribir el byte nulo en la direcci贸n 2 para indicar el final de la cadena
+WRITE_EEPROM(24, 'M'); // Escribir el byte nulo en la direcci贸n 2 para indicar el final de la cadena
 write_eeprom(25, '\0');
 }
 void leeralarma(){
