@@ -40,19 +40,20 @@ void timer_reloj(void)
       if(S1==10){//Overflow para el primer digito de cada segundo.
          S1=0;
          S2++;
-         if(S2==6){
+         if(S2==6){//Overflow de segundo a minutos.
             S2=0;
             M++;
-            if(M>59){
-                  M=0;
-                  h++;   
+            if(M>59){//Overflow de de minutos a horas.
+              M=0;
+              h++;   
             }
-            if(h==24){
-                  h=00;
-                  DD++;
+            if(h==24){//Overflow de horas a dias.
+              h=00;
+              DD++;
               }
          }
         }
+     //Se establecen los dias para el ano bisiesto.
         if(MT==2){
             if(AA%4==0){
                 if(DD>29){
@@ -61,11 +62,11 @@ void timer_reloj(void)
                 }
             }else{
                 if(DD>28){
-                        DD=1;
-                        MT++;
-                     }
-                  }
-               }
+                  DD=1;
+                  MT++;
+                }
+            }
+        }
        //Se establecen los meses que contienen hasta el dia 31.
         if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
             if(DD>31){
