@@ -38,17 +38,17 @@ void timer_reloj(void)
      desbordamiento=0;
      S1++;
       if(S1==10){//Overflow para el primer digito de cada segundo.
-         S1=0;
+         S1 = 0;
          S2++;
          if(S2==6){//Overflow de segundo a minutos.
             S2=0;
             M++;
             if(M>59){//Overflow de de minutos a horas.
-              M=0;
+              M = 0;
               h++;   
             }
             if(h==24){//Overflow de horas a dias.
-              h=00;
+              h = 00;
               DD++;
               }
          }
@@ -57,12 +57,12 @@ void timer_reloj(void)
         if(MT==2){
             if(AA%4==0){
                 if(DD>29){
-                    DD=1;
+                    DD = 1;
                     MT++;
                 }
             }else{ //Si no se cumple la condicion seran 28.
                 if(DD>28){
-                  DD=1;
+                  DD = 1;
                   MT++;
                 }
             }
@@ -70,20 +70,20 @@ void timer_reloj(void)
        //Se establecen las condicionales para los dias 31.
         if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
             if(DD>31){
-                DD=1;
+                DD = 1;
                 MT++;
             }
         }
        //Se establecen las condicionales para los dias 30.
         if(MT==4 || MT==6 || MT==9 || MT==11){
             if(DD>30){
-                DD=1;
+                DD = 1;
                 MT++;
             }
         }
        //Overflow de mes, a anos.
         if(MT>12){
-            MT=1;
+            MT = 1;
             AA++;
         } 
     } 
@@ -99,27 +99,27 @@ void TIMER2_isr(void){
         if(MT==2){
             if(AA%4==0){
                 if(DD>29){
-                    DD=1;
+                    DD = 1;
                 }
             }else{
                 if(DD>28){
-                    DD=1;
+                    DD = 1;
                 }
             }
         }
              
         if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
             if(DD>31){
-                DD=1;
+                DD = 1;
             }
         }
             if(MT==4 || MT==6 || MT==9 || MT==11){
                 if(DD>30){
-                    DD=1;
+                    DD = 1;
                 }
             }
             if(MT>12){
-                MT=1;
+                MT = 1;
             } 
     } 
        set_timer0(210);
@@ -155,26 +155,26 @@ void reloj(){
     lcd_gotoxy(1,1); //Columna 1, Fila 1.
     //Print para AM.
         if(h<12){
-            ampm="AM";
+            ampm = "AM";
             if(h==0){
-                hr=h+12;
-                printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+                hr = h+12;
+                printf(lcd_putc,"%02d:%02d:%u%u %s", hr, M, S2, S1, ampm);
             }else
-                printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
+                printf(lcd_putc,"%02d:%02d:%u%u %s", h, M, S2, S1, ampm);
         }
         //Print para PM
         else if(h==12) {
-            ampm="PM";
-            printf (lcd_putc,"%02d:%02d:%u%u %s",h,M, S2, S1, ampm);
+            ampm = "PM";
+            printf(lcd_putc,"%02d:%02d:%u%u %s", h, M, S2, S1, ampm);
         }else if(h>12 && h<24){
-            ampm="PM";
-            hr=h-12;
-            printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+            ampm = "PM";
+            hr = h-12;
+            printf(lcd_putc,"%02d:%02d:%u%u %s", hr, M, S2, S1, ampm);
       }else if(h>=24){ //Overflow de PM a AM en el display.
-            ampm="AM";
-            h=0;
-            hr=h+12;
-            printf (lcd_putc,"%02d:%02d:%u%u %s",hr,M, S2, S1, ampm);
+            ampm = "AM";
+            h = 0;
+            hr = h+12;
+            printf (lcd_putc,"%02d:%02d:%u%u %s", hr, M, S2, S1, ampm);
       }     
 }
 //Funcion para el display de alarma en el LCD.
@@ -185,110 +185,93 @@ void alarma(){
             ampm_alarma="AM";
             if(h_alarma==0){
                 hr_alarma=h_alarma+12;
-                printf (lcd_putc,"%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
+                printf (lcd_putc,"%02d:%02d %s", hr_alarma, m_alarma, ampm_alarma);
             }else
-                printf(lcd_putc,"%02d:%02d %s",h_alarma,m_alarma,ampm_alarma);
+                printf(lcd_putc,"%02d:%02d %s", h_alarma, m_alarma, ampm_alarma);
         }
         //Print para PM en la alarma.
         else if(h_alarma==12) {
-            ampm_alarma="PM";
-            printf (lcd_putc,"%02d:%02d %s",h_alarma,m_alarma,ampm_alarma);
+            ampm_alarma = "PM";
+            printf (lcd_putc,"%02d:%02d %s", h_alarma, m_alarma, ampm_alarma);
             write_eeprom(6,ampm);
         }else if(h_alarma>12 && h_alarma<24){
-            ampm_alarma="PM";
+            ampm_alarma = "PM";
             hr_alarma=h_alarma-12;
-            printf (lcd_putc,"%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
+            printf (lcd_putc,"%02d:%02d %s", hr_alarma, m_alarma, ampm_alarma);
         }else if(h_alarma>=24){
             ampm_alarma="AM";
             h_alarma=0;
             hr_alarma=h_alarma+12;
-            printf(lcd_putc, "%02d:%02d %s",hr_alarma,m_alarma,ampm_alarma);
+            printf(lcd_putc, "%02d:%02d %s", hr_alarma, m_alarma, ampm_alarma);
       }
 }
 //Funcion para display de fecha en el LCD 
 void mostrar_fecha(){
-   
-  lcd_gotoxy(1,2);
-            printf(lcd_putc,"%02i",DD);
-             lcd_gotoxy(3,2);
-            lcd_putc("/");
-            lcd_gotoxy(4,2);
-            printf(lcd_putc,"%02i",MT);
-            lcd_gotoxy(6,2);
-            lcd_putc("/");
-            lcd_gotoxy(7,2);
-            printf(lcd_putc,"20%02i",AA);
+    lcd_gotoxy(1,2); //Columna 1, Fila 2.
+        printf(lcd_putc,"%02i",DD); //Dias.
+        lcd_gotoxy(3,2); //Columna 3, FIla 2.
+        lcd_putc("/");
+        lcd_gotoxy(4,2); //Columna 4, Fila 2.
+        printf(lcd_putc,"%02i",MT); //Mes.
+        lcd_gotoxy(6,2);//Columna 6, Fila 2.
+        lcd_putc("/");
+        lcd_gotoxy(7,2); //Columna 7, Fila 2.
+        printf(lcd_putc,"20%02i",AA); //Ano.
 }
+//Funciona de ajuste de fecha.
 void ajuste_fecha(){
-if(input(PIN_A1))
-         {
-         
-          delay_ms(150);
-               
-               DD++;
-               
-               if(MT==2)
-               {
-               
-                  if(AA%4==0)
-                  {
-                     if(DD>29)
-                     {
-                        DD=1;
-                     }
-                  }
-                  else
-                  {
-                     if(DD>28)
-                     {
-                        DD=1;
-                     }
-                  }
-               }
-             
-               if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12)
-               {
-                  if(DD>31)
-                  {
-                     DD=1;
-                  }
-               }
-               if(MT==4 || MT==6 || MT==9 || MT==11)
-               {
-                  if(DD>30)
-                  {
-                     DD=1;
-                  }
-               }
-               
+    //Boton A1 para la config. de dias.
+    if(input(PIN_A1)){
+        delay_ms(150);
+        DD++;
+        //Ajuste de seleccion de dia para ano bisiesto.
+        //Mes de Febrero.
+        if(MT==2){
+            if(AA%4==0){
+                if(DD>29){ //Al sobrepasar 29, volver a 1.
+                    DD=1;
+                }
+            }else{
+                if(DD>28){ //Al sobrepasar 28, volver 1.
+                    DD=1;
+                }
             }
-          if(input(PIN_A2))
-         {
-               delay_ms(150);
-               
-               MT++;
-               
-               if(MT>12)
-               {
-                  MT=1;
+        }
+        //Ajuste de seleccion para los meses con 31 dias.
+        if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
+            if(DD>31){ //Al sobrepasar volver a 1.
+                DD=1;
+                  }
                }
+        //Ajuste de seleccion para los meses con 30 dias.
+        if(MT==4 || MT==6 || MT==9 || MT==11){
+            if(DD>30){
+                DD=1;
+            }
+        }
                
-            } 
-           if(input(PIN_A3))
-         {
-         delay_ms(150);
-               
-               AA++;
-               
-               if(AA>99)
-               {
-                  AA=00;
-               }
-               
-            } 
-  
-          mostrar_fecha(); 
+    }
+    //Boton A2 para la config. de mes.
+    if(input(PIN_A2)){
+        delay_ms(150);
+        MT++;
+        if(MT>12){ //Al sonbre pasar 12, volver a 1.
+            MT=1;
+        }
+    } 
+    //Boton A3 para la config. de ano.
+    if(input(PIN_A3)){
+        delay_ms(150);
+        AA++;
+        if(AA>99){ //Al sobre pasar volver 99, volver a 00.
+            AA=00; //Ya que el ano parte del ano 2000.
+        }
+    }
+    //Al ya ser asignados llama a la funcion para mostrar
+    //en el display de forma permanente.
+    mostrar_fecha();
 }
+//Funcion ajuste de alarma
 void ajuste_alarma(){
    lcd_gotoxy(1,1); //alarma
             lcd_putc("AJUSTE ALARMA:");
