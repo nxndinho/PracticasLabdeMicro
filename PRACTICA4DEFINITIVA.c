@@ -67,14 +67,14 @@ void timer_reloj(void)
                 }
             }
         }
-       //Se establecen los meses que contienen hasta el dia 31.
+       //Se establecen las condicionales para los dias 31.
         if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
             if(DD>31){
                 DD=1;
                 MT++;
             }
         }
-       //Se establecen los meses que contienen hasta el dia 30.
+       //Se establecen las condicionales para los dias 30.
         if(MT==4 || MT==6 || MT==9 || MT==11){
             if(DD>30){
                 DD=1;
@@ -93,72 +93,58 @@ void timer_reloj(void)
 #INT_TIMER2
 void TIMER2_isr(void){
 
- desbordamiento++;
-   if(desbordamiento==100)
-   {
-      desbordamiento=0;
- if(MT==2)
-               {
-        
-                  if(AA%4==0)
-                  {
-                     if(DD>29)
-                     {
-                        DD=1;
-                     }
-                  }
-                  else
-                  {
-                     if(DD>28)
-                     {
-                        DD=1;
-                     }
-                  }
-               }
-             
-               if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12)
-               {
-                  if(DD>31)
-                  {
-                     DD=1;
-                  }
-               }
-               if(MT==4 || MT==6 || MT==9 || MT==11)
-               {
-                  if(DD>30)
-                  {
-                     DD=1;
-                  }
-               }
-              if(MT>12)
-               {
-                  MT=1;
-               } 
+    desbordamiento++;
+    if(desbordamiento==100){
+        desbordamiento=0;
+        if(MT==2){
+            if(AA%4==0){
+                if(DD>29){
+                    DD=1;
+                }
+            }else{
+                if(DD>28){
+                    DD=1;
+                }
             }
-        
-            
-            
+        }
+             
+        if(MT==1 || MT==3 || MT==5 || MT==7 || MT==8 || MT==10 || MT==12){
+            if(DD>31){
+                DD=1;
+            }
+        }
+            if(MT==4 || MT==6 || MT==9 || MT==11){
+                if(DD>30){
+                    DD=1;
+                }
+            }
+            if(MT>12){
+                MT=1;
+            } 
+    } 
        set_timer0(210);
 }       
-
+//Funcion para guardar variables de alarma en la EEPROM.
 void guardar_alarma(){
- WRITE_EEPROM(16, hr_alarma);
- WRITE_EEPROM(17,m_alarma);
- WRITE_EEPROM(19,h_alarma);
- WRITE_EEPROM(20, 'A');  // Escribir el primer byte en la dirección 0
-WRITE_EEPROM(21, 'M');
-write_eeprom(22, '\0');// Escribir el segundo byte en la dirección 1
-WRITE_EEPROM(23, 'P'); // Escribir el byte nulo en la dirección 2 para indicar el final de la cadena
-WRITE_EEPROM(24, 'M'); // Escribir el byte nulo en la dirección 2 para indicar el final de la cadena
-write_eeprom(25, '\0');
+    write_eeprom(16, hr_alarma);
+    write_eeprom(17,m_alarma);
+    write_eeprom(19,h_alarma);
+    write_eeprom(20, 'A');
+    write_eeprom(21, 'M');
+    write_eeprom(22, '\0');
+    write_eeprom(23, 'P'); 
+    write_eeprom(24, 'M'); 
+    write_eeprom(25, '\0');
 }
+//Funcion de lectura de EEPROM para las variables de alarma.
 void leeralarma(){
       hr_alarma=READ_EEPROM(16);
       m_alarma=READ_EEPROM(17);
       h_alarma=READ_EEPROM(19);
-      strcpy(ampm_alarma, READ_EEPROM(20));
-      strcpy(ampm_alarma, READ_EEPROM(23));
+      strcpy(ampm_alarma, READ_EEPROM(20)); //Si la condicion es AM.
+      strcpy(ampm_alarma, READ_EEPROM(23)); //Si la condicon es PM.
 }
+
 void leerfecha(){
   DD = READ_EEPROM(13);
        MT = READ_EEPROM(14);
