@@ -10,6 +10,7 @@
 #define LEDALAR PORTC,4
 //Declaracion de variables
 int8 valh11=0;
+int8 valh12=0;
 int h=0,hr=0,S1=0,S2=0,M=0; 
 int m_alarma=0,h_alarma=0,hr_alarma=0;
 int DD=1,MT=1,AA=0;
@@ -501,15 +502,15 @@ void modo_hora_fecha(){
 void modo_hora_temperatura(){
 if (input(pin_A2) == 1){
 delay_ms(450);
-valh11 = 1;
+valh12 = 1;
 LCD_PUTC('\f');
 }
-while (valh11 == 1){
+while (valh12 == 1){
 mostrar_temperatura();
 reloj();
 if(input(pin_A2) == 1){
 delay_ms(450);
-valh11 = 0;
+valh12 = 0;
 LCD_PUTC('\f');
 }
 }
@@ -538,7 +539,7 @@ void main() {
         }else{
             BIT_CLEAR(LEDALAR);
         }
-        modo_hora_temperatura();
-            modo_hora_fecha();     
+            modo_hora_fecha();
+            modo_hora_temperatura();
     }    
 }   
