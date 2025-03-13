@@ -182,8 +182,8 @@ void reloj(){
 //Funcion para el display de alarma en el LCD.
 void alarma(){  
     lcd_gotoxy(1,2);
-    printf(lcd_putc,"A");
-    lcd_gotoxy(3,2); //Columna 9, Fila 2.
+    printf(lcd_putc,"ALARMA");
+    lcd_gotoxy(9,2); //Columna 9, Fila 2.
     //Print para AM en la alarma.
         if(h_alarma<12){
             ampm_alarma="AM";
@@ -209,18 +209,7 @@ void alarma(){
             printf(lcd_putc, "%02d:%02d %s", hr_alarma, m_alarma, ampm_alarma);
       }
 }
-void mostrar_temperatura(){
-setup_adc_ports(AN0);
-    setup_adc(adc_clock_internal);
-    set_adc_channel(7);
-float valor_adc = read_adc();
-float centigrados = (valor_adc*500.0)/1023.0;
-      lcd_gotoxy(1,2);
-      lcd_putc("TEMP");
-      lcd_gotoxy(6,2);
-      printf(lcd_putc,"%0.2f C", centigrados);
-      delay_ms(150);
-}
+
 //Funcion para display de fecha en el LCD 
 void mostrar_fecha(){
     lcd_gotoxy(1,2);
@@ -235,6 +224,18 @@ void mostrar_fecha(){
         lcd_putc("/");
         lcd_gotoxy(13,2); //Columna 13, Fila 2.
         printf(lcd_putc,"20%02i",AA); //Ano.
+}
+void mostrar_temperatura(){
+setup_adc_ports(AN0);
+    setup_adc(adc_clock_internal);
+    set_adc_channel(7);
+    float valor_adc = read_adc();
+    float centigrados = (valor_adc*500.0)/1023.0;
+      lcd_gotoxy(1,2);
+      lcd_putc("TEMP");
+      lcd_gotoxy(9,2);
+      printf(lcd_putc,"%0.2f C", centigrados);
+      delay_ms(150);
 }
 //Funciona de ajuste de fecha.
 void ajuste_fecha(){
@@ -278,7 +279,7 @@ void ajuste_fecha(){
         }
     } 
     //Boton A3 para la config. de ano.
-    if(input(PIN_A3)){
+    if(input(PIN_A4)){
         delay_ms(150); //filtro anti-rebote
         AA++;
         if(AA>99){ //Al sobre pasar volver 99, volver a 00.
@@ -346,7 +347,7 @@ void ajuste_hora() {
     lcd_gotoxy(6,2); //Columna 6, Fila 2.
     printf(lcd_putc,"");
     //Boton A3 para ajuste de segundos.
-    if(input(pin_A3) == 1){
+    if(input(pin_A4) == 1){
         S1++;
         if (S1 == 10) { //Overflow del primer digito de segundos.
             S1 = 0;
@@ -479,25 +480,8 @@ void ajuste(){
                     delay_ms(400);
                 }
         }
-    }  
+    }
     while(valh3==1);{}         
-}
-//Cambio de fila 2 para mostrar la fecha
-void modo_hora_fecha(){
-    if (input(pin_A3) == 1) { //modo hora/fecha 
-        delay_ms(450); //filtro anti-rebote
-        valh11 = 1;
-        LCD_PUTC('\f');
-    }
-    while (valh11 == 1) { 
-        mostrar_fecha();
-        reloj(); 
-        if(input(pin_A3) == 1){
-            delay_ms(450);
-            valh11 = 0;
-            LCD_PUTC('\f');
-        }
-    }
 }
 void modo_hora_temperatura(){
 if (input(pin_A2) == 1){
@@ -515,6 +499,24 @@ LCD_PUTC('\f');
 }
 }
 }
+//Cambio de fila 2 para mostrar la fecha
+void modo_hora_fecha(){
+    if (input(pin_A4) == 1) { //modo hora/fecha 
+        delay_ms(450); //filtro anti-rebote
+        valh11 = 1;
+        LCD_PUTC('\f');
+    }
+    while (valh11 == 1) { 
+        mostrar_fecha();
+        reloj(); 
+        if(input(pin_A4) == 1){
+            delay_ms(450);
+            valh11 = 0;
+            LCD_PUTC('\f');
+        }
+    }
+}
+
 void main() {
     configuracion();
     configuracion2();
@@ -539,7 +541,8 @@ void main() {
         }else{
             BIT_CLEAR(LEDALAR);
         }
+           modo_hora_temperatura();
             modo_hora_fecha();
-            modo_hora_temperatura();
+            
     }    
 }   
